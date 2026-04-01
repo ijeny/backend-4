@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Tambah User</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    </head>
+    <body class="container mt-5">
+        <h2 class="mb-4">Tambah User</h2>
+        <form action="/add" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label>Nama:</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Email:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="file" class="form-label">Foto:</label>
+                <input type="file" name="file" class="form-control" id="file" required>
+            </div>
+            <button type="submit" class="btn btn-success">Simpan</button>
+        </form>
+        <a href="/" class="btn btn-secondary">Kembali</a>
+    </body>
+</html>
