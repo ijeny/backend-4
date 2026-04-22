@@ -55,7 +55,7 @@ app.post('/edit/:id', (req,res) => {
 //DELETE
 app.get('/delete/:id', (req, res) => {
     const id = req.params.id;
-    db.query('DELETE FROM users WHERE did = ?', [id], (err) => {
+    db.query('DELETE FROM users WHERE id = ?', [id], (err) => {
         if (err) throw err;
         res.redirect('/');
     });
