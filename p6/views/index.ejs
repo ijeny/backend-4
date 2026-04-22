@@ -5,42 +5,87 @@
     <title>
         <%= title %>
     </title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .container-box {
+            width: 85%;
+            margin: 40px auto;
+            border: 2px solid #6b8e23;
+            padding: 20px;
+            background: white;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-space {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>CRUD DATA MAHASISWA</h1>
+    <div class="container-box">
 
-    <table border="1" cellpadding="10">
-        <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>NIM</th>
-            <th>Jurusan</th>
-            <th>Alamat</th>
-        </tr>
+        <h1>CRUD DATA MAHASISWA STIKOM</h1>
 
-        <% mahasiswa.forEach((item, index)=> { %>
-            <tr>
-                <td>
-                    <%= index + 1 %>
-                </td>
-                <td>
-                    <%= item.nama %>
-                </td>
-                <td>
-                    <%= item.nim %>
-                </td>
-                <td>
-                    <%= item.jurusan %>
-                </td>
-                <td>
-                    <%= item.alamat %>
-                </td>
-            </tr>
-            <% }) %>
+        <a href="/mahasiswa/add" class="btn btn-primary btn-sm btn-space">Add</a>
 
-    </table>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>NIM</th>
+                    <th>Jurusan</th>
+                    <th>Alamat</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% mahasiswa.forEach((item, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td>
+                            <%= item.nama %>
+                        </td>
+                        <td>
+                            <%= item.nim %>
+                        </td>
+                        <td>
+                            <%= item.jurusan %>
+                        </td>
+                        <td>
+                            <%= item.alamat %>
+                        </td>
+                        <td>
+                            <a href="/mahasiswa/edit/<%= item._id %>" class="btn btn-warning btn-xs">Edit</a>
+
+                            <a href="/mahasiswa/delete/<%= item._id %>"
+                                onclick="return confirm('Yakin hapus data ini?')" class="btn btn-danger btn-xs">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+
+        </table>
+
+    </div>
 
 </body>
 
