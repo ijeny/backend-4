@@ -1,51 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>CRUD Users</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    </head>
-    <body>
-        <div class="container mt-5">
-            <h2 class="mb-4">Daftar Users</h2>
-            <a href="/add" class="btn btn-primary mb-3">Tambah User</a>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>File</th>
-                        <th>Foto</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% users.forEach(user=> { %>
-                        <tr>
-                            <td>
-                                <%= user.id %>
-                            </td>
-                            <td>
-                                <%= user.name %>
-                            </td>
-                            <td>
-                                <%= user.email %>
-                            </td>
-                            <td>
-                                <%= user.filename %>
-                            </td>
-                            <td><img src="/uploads/<%= user.filename %>" width="50" height="50"></td>
-                            <td>
-                                <a href="/edit/<%= user.id %>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="/delete/<%= user.id %>" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Yakin ingin menghapus user ini?')">
-                                    Hapus
-                                </a>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+
+<head>
+    <title>Admin Produk</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .container-box {
+            width: 92%;
+            margin: 36px auto;
+            border: 2px solid #6b8e23;
+            padding: 22px;
+            background: #fff;
+        }
+
+        .header-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .product-photo {
+            object-fit: cover;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-box">
+        <div class="header-bar">
+            <h2 class="m-0">Admin Produk Toko Baju</h2>
+            <a href="/ukuran" class="btn btn-outline-success">Kelola Ukuran</a>
         </div>
-    </body>
+
+        <% if (alert && alert.message) { %>
+            <div class="alert alert-<%= alert.type === 'danger' ? 'danger' : 'success' %>" role="alert">
+                <%= alert.message %>
+            </div>
+            <% } %>
+
+                <form action="/" method="GET" class="row g-2 mb-3">
+                    <div class="col-md-5">
+                        <input type="text" name="q" class="form-control" placeholder="Cari kode / nama baju"
+                            value="<%= keyword %>">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="size" class="form-select">
+                            <option value="">Semua ukuran</option>
+                            <% sizes.forEach(sizeOption=> { %>
+                                <option value="<%= sizeOption.id %>" <%=Number(sizeOption.id)===Number(size)
+                                    ? 'selected' : '' %>>
+                                    <%= sizeOption.nama_ukuran %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-success">Filter</button>
+                        <a href="/" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+
+                <div class="btn-row">
+                    <a href="/add" class="btn btn-primary">Tambah Produk</a>
+                </div>
+
+                <table class="table table-bordered table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama Baju</th>
+                            <th>Ukuran</th>
+                            <th>Warna</th>
+                            <th>Stok</th>
+                            <th>Harga Pokok</th>
+                            <th>Harga Jual</th>
+                            <th>Foto</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (!products.length) { %>
+                            <tr>
+                                <td colspan="9" class="text-center">Data produk tidak ditemukan.</td>
+                            </tr>
+                            <% } %>
+                                <% products.forEach(product=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= product.kode_baju %>
+                                        </td>
+                                        <td>
+                                            <%= product.nama_baju %>
+                                        </td>
+                                        <td>
+                                            <%= product.nama_ukuran || '-' %>
+                                        </td>
+                                        <td>
+                                            <%= product.warna %>
+                                        </td>
+                                        <td>
+                                            <%= product.stok %>
+                                        </td>
+                                        <td>
+                                            Rp <%= Number(product.harga_pokok || 0).toLocaleString('id-ID') %>
+                                        </td>
+                                        <td>
+                                            Rp <%= Number(product.harga_jual || 0).toLocaleString('id-ID') %>
+                                        </td>
+                                        <td>
+                                            <% if (product.filename) { %>
+                                                <img src="/uploads/<%= product.filename %>" width="50" height="50"
+                                                    class="product-photo">
+                                                <% } else { %>
+                                                    -
+                                                    <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/edit/<%= product.kode_baju %>"
+                                                class="btn btn-warning btn-sm">Edit</a>
+                                            <a href="/delete/<%= product.kode_baju %>" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Yakin ingin menghapus produk ini?')">
+                                                Hapus
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                    </tbody>
+                </table>
+
+                <nav>
+                    <ul class="pagination">
+                        <% const prevPage=page - 1; %>
+                            <% const nextPage=page + 1; %>
+
+                                <li class="page-item <%= page <= 1 ? 'disabled' : '' %>">
+                                    <a class="page-link"
+                                        href="/?page=<%= prevPage %>&q=<%= encodeURIComponent(keyword) %>&size=<%= size || '' %>">Previous</a>
+                                </li>
+
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <li class="page-item <%= i === page ? 'active' : '' %>">
+                                        <a class="page-link"
+                                            href="/?page=<%= i %>&q=<%= encodeURIComponent(keyword) %>&size=<%= size || '' %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+                                        <li class="page-item <%= page >= totalPages ? 'disabled' : '' %>">
+                                            <a class="page-link"
+                                                href="/?page=<%= nextPage %>&q=<%= encodeURIComponent(keyword) %>&size=<%= size || '' %>">Next</a>
+                                        </li>
+                    </ul>
+                </nav>
+    </div>
+</body>
+
 </html>
